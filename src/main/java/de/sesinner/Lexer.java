@@ -198,7 +198,7 @@ class Lexer {
     }
 
     /**
-     * Creates a new token that has no specific value, e.g. a plus sign '+' or a keyword like 'true'.
+     * Creates a new token that has no specific literal value, e.g., a plus sign '+' or a keyword like 'true'.
      * The literal field of the resulting Token will be set to {@code Optional.empty()}.
      *
      * @param type The category of the token.
@@ -215,6 +215,7 @@ class Lexer {
      * @param type The category of the token.
      * @param literal The actual parsed Java value (e.g., an Integer).
      */
+    @SuppressWarnings("SameParameterValue")
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, Optional.of(literal), line));
