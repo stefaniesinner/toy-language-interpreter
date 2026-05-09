@@ -50,8 +50,8 @@ class Lexer {
     }
 
     /**
-     * Starts the scanning process. It loops through the entire source code, extracting one word at a time, until it
-     * reaches the end.
+     * Starts the scanning process.
+     * It loops through the entire source code, extracting one word at a time, until it reaches the end.
      *
      * @return A list of all identified tokens in the correct order.
      */
@@ -199,7 +199,7 @@ class Lexer {
 
     /**
      * Creates a new token that has no specific value, e.g. a plus sign '+' or a keyword like 'true'.
-     * In these cases, the type and text are enough information.
+     * The literal field of the resulting Token will be set to {@code Optional.empty()}.
      *
      * @param type The category of the token.
      */
@@ -209,7 +209,8 @@ class Lexer {
     }
 
     /**
-     * Creates a new token and adds it to our internal list of tokens.
+     * Creates a new token with a specific literal value and adds it to our internal list of tokens.
+     * The provided literal is wrapped in an {@code Optional}.
      *
      * @param type The category of the token.
      * @param literal The actual parsed Java value (e.g., an Integer).
