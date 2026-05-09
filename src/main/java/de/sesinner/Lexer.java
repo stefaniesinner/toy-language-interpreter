@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static de.sesinner.TokenType.*;
 
@@ -61,7 +62,7 @@ class Lexer {
             scanToken(c);
         }
 
-        tokens.add(new Token(EOF, "", "", line));
+        tokens.add(new Token(EOF, "", Optional.empty(), line));
         return tokens;
     }
 
@@ -203,7 +204,8 @@ class Lexer {
      * @param type The category of the token.
      */
     private void addToken(TokenType type) {
-        addToken(type, "");
+        String text = source.substring(start, current);
+        tokens.add(new Token(type, text, Optional.empty(), line));
     }
 
     /**
@@ -214,6 +216,6 @@ class Lexer {
      */
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
-        tokens.add(new Token(type, text, literal, line));
+        tokens.add(new Token(type, text, Optional.of(literal), line));
     }
 }
