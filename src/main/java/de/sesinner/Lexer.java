@@ -7,6 +7,13 @@ import java.util.Map;
 
 import static de.sesinner.TokenType.*;
 
+/**
+ * Reads the raw source code and translates it into a list of {@link Token} objects.
+ * <p>
+ * The Lexer acts as the first phase of the interpreter. It reads the source code character by character, ignores
+ * whitespaces, and groups characters into meaningful words. For every valid word, it assigns a {@link TokenType} and
+ * creates a new {@link Token}.
+ */
 class Lexer {
 
     private static final char EOF_CHAR = '\0'; // end of the source string
@@ -32,10 +39,21 @@ class Lexer {
     private int current = 0;
     private int line = 1;
 
+    /**
+     * Initializes the Lexer with the raw source code provided by the user.
+     *
+     * @param source The complete code to interpret.
+     */
     Lexer(String source) {
         this.source = source;
     }
 
+    /**
+     * Starts the scanning process. It loops through the entire source code, extracting one word at a time, until it
+     * reaches the end.
+     *
+     * @return A list of all identified tokens in the correct order.
+     */
     List<Token> scanTokens() {
         while (!isAtEnd()) {
             start = current; // marks the beginning of the next word
@@ -47,6 +65,11 @@ class Lexer {
         return tokens;
     }
 
+    /**
+     * Evaluates a single character to determine what kind of token it belongs to.
+     *
+     * @param c The character to read and categorize.
+     */
     private void scanToken(char c) {
         switch (c) {
             // single-character tokens
@@ -95,6 +118,11 @@ class Lexer {
         }
     }
 
+    /**
+     * Extracts a sequence of digits from the source code and converts it into a real Java Integer.
+     * This is necessary so the interpreter can later perform actual math with it, rather than treating the number just
+     * as text.
+     */
     private void scanNumber() {
         while (Character.isDigit(peekNextChar())) {
             scanNextChar();
@@ -104,6 +132,11 @@ class Lexer {
         addToken(NUMBER, Integer.parseInt(text));
     }
 
+    /**
+     * Extracts a sequence of letters or numbers to form a word (e.g., a variable name).
+     * If the word is a reserved language keyword, it gets a specific keyword token.
+     * Otherwise, it is treated as a custom user-defined name (an identifier).
+     */
     private void scanIdentifier() {
         while (Character.isLetterOrDigit(peekNextChar()) || peekNextChar() == '_') {
             scanNextChar();
@@ -114,10 +147,23 @@ class Lexer {
         addToken(type);
     }
 
+    /**
+     * Checks if we have reached the end of the source code string.
+     *
+     * @return {@code true} if there are no more characters to read, otherwise {@code false}.
+     */
     private boolean isAtEnd() {
         return current >= source.length();
     }
 
+    /**
+     * To compare the upcoming character with the one we expect.
+     * If they match, the pointer moves forward and consumes the character.
+     * Useful for distinguishing two-character symbols.
+     *
+     * @param expected The character we hope to see.
+     * @return {@code true} if it matched with the expected character, otherwise {@code false}.
+     */
     private boolean match(char expected) {
         if (!isAtEnd() && source.charAt(current) == expected) {
             current++;
@@ -126,6 +172,13 @@ class Lexer {
         return false;
     }
 
+    /**
+     * Inspects the upcoming character without moving the pointer forward.
+     * Useful when we are currently reading a word and want to check if the next character belongs to it, without
+     * accidentally consuming a character that belongs to the next token.
+     *
+     * @return The upcoming character, or a null character if we have reached the end of the source code.
+     */
     private char peekNextChar() {
         if (isAtEnd()) {
             return EOF_CHAR;
@@ -133,14 +186,32 @@ class Lexer {
         return source.charAt(current);
     }
 
+    /**
+     * Reads the character at the current position and moves the internal pointer one step forward to progress through
+     * the source code character by character.
+     *
+     * @return The character that was just read.
+     */
     private char scanNextChar() {
         return source.charAt(current++);
     }
 
+    /**
+     * Creates a new token that has no specific value, e.g. a plus sign '+' or a keyword like 'true'.
+     * In these cases, the type and text are enough information.
+     *
+     * @param type The category of the token.
+     */
     private void addToken(TokenType type) {
         addToken(type, "");
     }
 
+    /**
+     * Creates a new token and adds it to our internal list of tokens.
+     *
+     * @param type The category of the token.
+     * @param literal The actual parsed Java value (e.g., an Integer).
+     */
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));

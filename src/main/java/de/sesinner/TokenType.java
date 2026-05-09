@@ -1,5 +1,8 @@
 package de.sesinner;
 
+/**
+ * Defines every valid operator, symbol, and keyword that our language understands.
+ */
 enum TokenType {
 
     // single-character tokens
