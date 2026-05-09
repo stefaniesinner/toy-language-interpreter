@@ -1,4 +1,3 @@
 package de.sesinner;
 
-class Token {
-}
+record Token(TokenType type, String lexeme, Object literal, int line) {}
