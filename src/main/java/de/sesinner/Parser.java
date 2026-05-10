@@ -1,5 +1,7 @@
 package de.sesinner;
 
+import java.util.List;
+
 /**
  * Reads the flat list of {@link Token} objects produced by the {@link Lexer} and builds the <i>Abstract Syntax
  * Tree (AST)</i>.
@@ -12,4 +14,15 @@ package de.sesinner;
  */
 class Parser {
 
+    private final List<Token> tokens;
+    private int current = 0;
+
+    /**
+     * Initializes the parser with the token list produced by the {@link Lexer}.
+     *
+     * @param tokens The complete list of tokens to parse.
+     */
+    Parser(List<Token> tokens) {
+        this.tokens = tokens;
+    }
 }
