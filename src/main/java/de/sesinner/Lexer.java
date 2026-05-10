@@ -120,9 +120,9 @@ class Lexer {
     }
 
     /**
-     * Extracts a sequence of digits from the source code and converts it into a real Java Integer.
-     * This is necessary so the interpreter can later perform actual math with it, rather than treating the number just
-     * as text.
+     * Extracts a sequence of digits from the source code and converts it into a real Java {@code Integer}.
+     * This is necessary so the interpreter can later perform actual math with it, rather than treating the number
+     * just as text.
      */
     private void scanNumber() {
         while (Character.isDigit(peekNextChar())) {
@@ -130,13 +130,18 @@ class Lexer {
         }
 
         String text = source.substring(start, current);
-        addToken(NUMBER, Integer.parseInt(text));
+        try {
+            int value = Integer.parseInt(text);
+            addToken(NUMBER, value);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Number too large at line " + line + ": " + text);
+        }
     }
 
     /**
      * Extracts a sequence of letters or numbers to form a word (e.g., a variable name).
-     * If the word is a reserved language keyword, it gets a specific keyword token.
-     * Otherwise, it is treated as a custom user-defined name (an identifier).
+     * If the word is a reserved language keyword, it is mapped to a specific keyword token.
+     * Otherwise, it is treated as a custom user-defined name (an {@code IDENTIFIER}).
      */
     private void scanIdentifier() {
         while (Character.isLetterOrDigit(peekNextChar()) || peekNextChar() == '_') {
@@ -198,8 +203,8 @@ class Lexer {
     }
 
     /**
-     * Creates a new token that has no specific literal value, e.g., a plus sign '+' or a keyword like 'true'.
-     * The literal field of the resulting Token will be set to {@code Optional.empty()}.
+     * Creates a new token that has no specific literal value, e.g., a plus sign {@code +}.
+     * The literal field of the resulting {@link Token} will be set to {@code Optional.empty()}.
      *
      * @param type The category of the token.
      */
@@ -210,10 +215,10 @@ class Lexer {
 
     /**
      * Creates a new token with a specific literal value and adds it to our internal list of tokens.
-     * The provided literal is wrapped in an {@code Optional}.
+     * The provided literal is wrapped in an {@link Optional}.
      *
      * @param type The category of the token.
-     * @param literal The actual parsed Java value (e.g., an Integer).
+     * @param literal The actual parsed Java value (e.g., an {@code Integer}).
      */
     @SuppressWarnings("SameParameterValue")
     private void addToken(TokenType type, Object literal) {
