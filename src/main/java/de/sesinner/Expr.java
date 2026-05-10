@@ -24,7 +24,7 @@ import java.util.List;
  *
  * <p>
  * Because this interface is {@code sealed}, only the specific record types defined inside this file are permitted.
- * This ensures type safety when the interpreter evaluates the tree.
+ * This ensures type safety when the {@link Interpreter} evaluates the tree.
  */
 sealed interface Expr {
 
