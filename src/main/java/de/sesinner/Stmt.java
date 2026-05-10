@@ -7,8 +7,10 @@ import java.util.List;
  * <p>
  * A statement performs an action but does not produce a value. When the {@link Parser} reads the source code, it
  * connects {@link Expr} and {@link Stmt} nodes together to build a tree structure called the <i>Abstract Syntax
- * Tree (AST)</i>. Statements are the outer nodes of that tree that control the flow of the program. They contain
- * {@link Expr} nodes for the parts that compute values.
+ * Tree (AST)</i>.
+ * <p>
+ * Statements are the outer nodes of that tree that control the flow of the program. They contain {@link Expr} nodes for
+ * the parts that compute values.
  */
 sealed interface Stmt {
 
