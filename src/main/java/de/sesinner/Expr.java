@@ -23,25 +23,21 @@ import java.util.List;
  * </pre>
  *
  * <p>
- * Because this interface is {@code sealed}, only the specific record types defined inside this file are permitted.
- * This ensures type safety when the {@link Interpreter} evaluates the tree.
+ * This interface is {@code sealed}, meaning only the specific types listed below are allowed.
+ * This makes evaluating the tree safer and easier for the {@link Interpreter}.
  */
 sealed interface Expr {
 
     /**
-     * Represents a variable assignment.
-     * <p>
-     * <b>Example:</b> {@code x = 5}
+     * A variable assignment.
      *
-     * @param name The {@code IDENTIFIER} token of the variable being assigned to.
-     * @param value The expression whose result is stored in the variable.
+     * @param name The token holding the variable's name.
+     * @param value The expression being evaluated and stored.
      */
     record Assign(Token name, Expr value) implements Expr {}
 
     /**
-     * Represents an operation with two operands.
-     * <p>
-     * <b>Examples:</b> {@code a + b}, {@code 5 == 3}
+     * An operation with two operands.
      *
      * @param left The left operand.
      * @param operator The operator token.
@@ -50,41 +46,31 @@ sealed interface Expr {
     record Binary(Expr left, Token operator, Expr right) implements Expr {}
 
     /**
-     * Represents a function call.
-     * <p>
-     * <b>Example:</b> {@code add(1, 2)}
+     * A function call, such as {@code add(1, 2)}.
      *
-     * @param callee The expression that produces the function to call (usually a variable name).
-     * @param paren The closing parenthesis token. Stored so that error messages can point to the call.
-     * @param arguments The values passed to the function.
+     * @param callee The expression being called.
+     * @param paren The closing parenthesis token to pinpoint errors.
+     * @param arguments The list of values passed into the function.
      */
     record Call(Expr callee, Token paren, List<Expr> arguments) implements Expr {}
 
     /**
-     * Represents an expression wrapped in parentheses.
-     * Parentheses are used to control the order in which parts of an expression are evaluated.
-     * <p>
-     * <b>Example:</b> {@code (x + 2)}
+     * An expression wrapped in parentheses to enforce the order of operations.
      *
      * @param expression The expression inside the parentheses.
      */
     record Grouping(Expr expression) implements Expr {}
 
     /**
-     * Represents a fixed value written directly in the source code.
-     * <p>
-     * <b>Examples:</b> {@code 42}, {@code true}
+     * A raw, fixed value written directly in the code, such as {@code 42} or {@code "hello"}.
      *
-     * @param value The value as a plain Java object (e.g. {@code Integer}, {@code Boolean}).
+     * @param value The underlying Java value (e.g., Integer, String, Boolean).
      */
     record Literal(Object value) implements Expr {}
 
     /**
-     * Represents a logical operation using {@code AND} or {@code OR}.
-     * Unlike {@link Binary}, the right side is only evaluated if it is still needed (for {@code AND} only when the left
-     * side is true, for {@code OR} only when the left side is false).
-     * <p>
-     * <b>Example:</b> {@code a AND b}
+     * A logical operation, such as {@code a AND b} or {@code x OR y}.
+     * The right side is only evaluated if the left side does not already determine the result.
      *
      * @param left The left-hand condition.
      * @param operator The logical operator token.
@@ -93,21 +79,17 @@ sealed interface Expr {
     record Logical(Expr left, Token operator, Expr right) implements Expr {}
 
     /**
-     * Represents an operation that is written in front of a single value.
-     * <p>
-     * <b>Examples:</b> {@code -5}, {@code !true}
+     * An operation applied in front of a single value, such as {@code -5} or {@code !true}.
      *
-     * @param operator The operator token.
-     * @param right The value the operator is applied to.
+     * @param operator The prefix operator.
+     * @param right The expression the operator modifies.
      */
     record Unary(Token operator, Expr right) implements Expr {}
 
     /**
-     * Represents reading the value of a variable by its name.
-     * <p>
-     * <b>Example:</b> {@code myVar}
+     * Reading the value of a variable by its name.
      *
-     * @param name The {@code IDENTIFIER} token for the variable.
+     * @param name The token holding the variable's name.
      */
     record Variable(Token name) implements Expr {}
 }
