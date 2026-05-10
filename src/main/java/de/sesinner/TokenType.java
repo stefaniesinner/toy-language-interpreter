@@ -11,7 +11,8 @@ enum TokenType {
     COMMA, MINUS, PLUS, SLASH, STAR, // , - + / *
 
     // one or two character tokens
-    EQUAL, EQUAL_EQUAL, NOT_EQUAL, // = == !=
+    BANG, BANG_EQUAL, // ! !=
+    EQUAL, EQUAL_EQUAL, // = ==
     GREATER, GREATER_EQUAL, // > >=
     LESS, LESS_EQUAL, // < <=
 
@@ -19,7 +20,7 @@ enum TokenType {
     IDENTIFIER, NUMBER,
 
     // keywords
-    DO, ELSE, FALSE, FUN, IF, RETURN, THEN, TRUE, WHILE,
+    AND, DO, ELSE, FALSE, FUN, IF, NIL, OR, RETURN, THEN, TRUE, WHILE,
 
     EOL, // separates statements at line breaks
     EOF  // marks the end of the source code

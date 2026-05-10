@@ -21,11 +21,14 @@ class Lexer {
     private static final Map<String, TokenType> KEYWORDS = new HashMap<>();
 
     static {
+        KEYWORDS.put("and", AND);
         KEYWORDS.put("do", DO);
         KEYWORDS.put("else", ELSE);
         KEYWORDS.put("false", FALSE);
         KEYWORDS.put("fun", FUN);
         KEYWORDS.put("if", IF);
+        KEYWORDS.put("nil", NIL);
+        KEYWORDS.put("or", OR);
         KEYWORDS.put("return", RETURN);
         KEYWORDS.put("then", THEN);
         KEYWORDS.put("true", TRUE);
@@ -85,16 +88,10 @@ class Lexer {
             case '*': addToken(STAR); break;
 
             // one or two character tokens
+            case '!': addToken(match('=') ? BANG_EQUAL : BANG); break;
             case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
             case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
             case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
-            case '!':
-                if (match('=')) {
-                    addToken(NOT_EQUAL);
-                } else {
-                    throw new RuntimeException("Unexpected character: '!' at line " + line);
-                }
-                break;
 
             // whitespaces and new lines (EOL)
             case ' ':

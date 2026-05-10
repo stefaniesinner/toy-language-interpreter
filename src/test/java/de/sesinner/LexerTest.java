@@ -59,14 +59,14 @@ class LexerTest {
 
     @Test
     void testScanTokens_multiCharacterTokens_returnsCorrectSequence() {
-        Lexer lexer = new Lexer("= == > >= < <= !=");
+        Lexer lexer = new Lexer("= == > >= < <= ! !=");
         List<Token> tokens = lexer.scanTokens();
 
         final TokenType[] expected = {
                 EQUAL, EQUAL_EQUAL,
                 GREATER, GREATER_EQUAL,
                 LESS, LESS_EQUAL,
-                NOT_EQUAL,
+                BANG, BANG_EQUAL,
                 EOF
         };
 
@@ -78,11 +78,11 @@ class LexerTest {
 
     @Test
     void testScanTokens_keywords_returnsKeywordToken() {
-        Lexer lexer = new Lexer("do else false fun if return then true while");
+        Lexer lexer = new Lexer("and do else false fun if nil or return then true while");
         List<Token> tokens = lexer.scanTokens();
 
         final TokenType[] expected = {
-                DO, ELSE, FALSE, FUN, IF, RETURN, THEN, TRUE, WHILE,
+                AND, DO, ELSE, FALSE, FUN, IF, NIL, OR, RETURN, THEN, TRUE, WHILE,
                 EOF
         };
 
@@ -152,6 +152,22 @@ class LexerTest {
     }
 
     @Test
+    void testScanTokens_loneExclamationMark_returnsBangToken() {
+        Lexer lexer = new Lexer("!true");
+        List<Token> tokens = lexer.scanTokens();
+
+        final TokenType[] expected = {
+                BANG, TRUE,
+                EOF
+        };
+
+        assertEquals(expected.length, tokens.size());
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], tokens.get(i).type());
+        }
+    }
+
+    @Test
     void testScanTokens_invalidCharacter_throwsRuntimeException() {
         Lexer lexer = new Lexer("x = 2%");
 
@@ -160,18 +176,6 @@ class LexerTest {
             fail("Lexer should throw an exception for unexpected character '%'");
         } catch (RuntimeException e) {
             assertTrue(e.getMessage().contains("Unexpected character: '%'"));
-        }
-    }
-
-    @Test
-    void testScanTokens_loneExclamationMark_throwsRuntimeException() {
-        Lexer lexer = new Lexer("!");
-
-        try {
-            lexer.scanTokens();
-            fail("Lexer should throw an exception for a lone exclamation mark");
-        } catch (RuntimeException e) {
-            assertTrue(e.getMessage().contains("Unexpected character: '!'"));
         }
     }
 
