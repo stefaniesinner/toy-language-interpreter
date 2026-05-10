@@ -5,22 +5,10 @@ import java.util.List;
 /**
  * Represents a statement in our language.
  * <p>
- * A statement performs an action but does not produce a value. The {@link Parser} builds a list of statements from the
- * source code, and the {@link Interpreter} executes them one by one.
- *
- * <p>
- * <b>Example:</b>
- * <br>
- * The source code {@code if x > 0 then y = 1 else y = 0} is translated into the following structures:
- * <pre>
- * If (condition: x > 0)
- *   then Branch: Expression -> Assign (name: "y", value: 1)
- *   else Branch: Expression -> Assign (name: "y", value: 0)
- * </pre>
- *
- * <p>
- * This interface is {@code sealed}, meaning only the specific types listed below are allowed.
- * This makes evaluating the tree safer and easier for the {@link Interpreter}.
+ * A statement performs an action but does not produce a value. When the {@link Parser} reads the source code, it
+ * connects {@link Expr} and {@link Stmt} nodes together to build a tree structure called the <i>Abstract Syntax
+ * Tree (AST)</i>. Statements are the outer nodes of that tree that control the flow of the program. They contain
+ * {@link Expr} nodes for the parts that compute values.
  */
 sealed interface Stmt {
 

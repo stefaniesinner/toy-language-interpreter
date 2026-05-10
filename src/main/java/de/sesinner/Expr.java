@@ -6,25 +6,9 @@ import java.util.List;
  * Represents an expression in our language.
  * <p>
  * An expression is any piece of code that can be evaluated to produce a value. When the {@link Parser} reads the source
- * code, it connects these expressions together to build a tree structure, called the <i>Abstract Syntax Tree (AST)</i>.
- *
- * <p>
- * <b>Example:</b>
- * <br>
- * The source code {@code x = 1 + 2} is translated into the following structures:
- * <pre>
- *     Conceptual View:                 Actual AST Representation:
- *
- *            x                             Assign (name: "x")
- *            |                                     |
- *            +                           Binary (operator: "+")
- *          /   \                           /                \
- *         1     2               Literal (value: 1)      Literal (value: 2)
- * </pre>
- *
- * <p>
- * This interface is {@code sealed}, meaning only the specific types listed below are allowed.
- * This makes evaluating the tree safer and easier for the {@link Interpreter}.
+ * code, it connects {@link Expr} and {@link Stmt} nodes together to build a tree structure called the <i>Abstract
+ * Syntax Tree (AST)</i>. Expressions are the parts of that tree that compute values. They are embedded inside
+ * {@link Stmt} nodes which perform the actions.
  */
 sealed interface Expr {
 

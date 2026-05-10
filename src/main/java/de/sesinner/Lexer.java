@@ -11,9 +11,9 @@ import static de.sesinner.TokenType.*;
 /**
  * Reads the raw source code and translates it into a list of {@link Token} objects.
  * <p>
- * The Lexer acts as the first phase of the interpreter. It reads the source code character by character, ignores
- * whitespaces, and groups characters into meaningful words. For every valid word, it assigns a {@link TokenType} and
- * creates a new {@link Token}.
+ * The lexer acts as the first phase of the {@link Interpreter}. It reads the source code character by character,
+ * ignores whitespaces, and groups characters into meaningful words. For every valid word, it assigns a
+ * {@link TokenType} and creates a new {@link Token}.
  */
 class Lexer {
 
