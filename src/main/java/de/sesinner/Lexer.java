@@ -54,7 +54,7 @@ class Lexer {
 
     /**
      * Starts the scanning process.
-     * It loops through the entire source code, extracting one word at a time, until it reaches the end.
+     * It loops through the entire source code, extracting one token at a time, until it reaches the end.
      *
      * @return A list of all identified tokens in the correct order.
      */
@@ -70,7 +70,7 @@ class Lexer {
     }
 
     /**
-     * Evaluates a single character to determine what kind of token it belongs to.
+     * Dispatches on a single character to produce the corresponding token.
      *
      * @param c The character to read and categorize.
      */
@@ -117,12 +117,10 @@ class Lexer {
     }
 
     /**
-     * Extracts a sequence of digits from the source code and converts it into a real Java {@code Integer}.
-     * This is necessary so the interpreter can later perform actual math with it, rather than treating the number
-     * just as text.
+     * Extracts a sequence of digits and emits a {@link TokenType#NUMBER} token with its parsed {@code int} value.
      */
     private void scanNumber() {
-        while (Character.isDigit(peekNextChar())) {
+        while (Character.isDigit(peekChar())) {
             advanceChar();
         }
 
@@ -141,7 +139,7 @@ class Lexer {
      * Otherwise, it is treated as a custom user-defined name (an {@code IDENTIFIER}).
      */
     private void scanIdentifier() {
-        while (Character.isLetterOrDigit(peekNextChar()) || peekNextChar() == '_') {
+        while (Character.isLetterOrDigit(peekChar()) || peekChar() == '_') {
             advanceChar();
         }
 
@@ -160,9 +158,8 @@ class Lexer {
     }
 
     /**
-     * To compare the upcoming character with the one we expect.
-     * If they match, the pointer moves forward and consumes the character.
-     * Useful for distinguishing two-character symbols.
+     * Consumes the current character if it matches the expected one, otherwise does nothing.
+     * Used to distinguish two-character tokens such as {@code ==} from {@code =}.
      *
      * @param expected The character we hope to see.
      * @return {@code true} if it matched with the expected character, otherwise {@code false}.
@@ -176,13 +173,11 @@ class Lexer {
     }
 
     /**
-     * Inspects the upcoming character without moving the pointer forward.
-     * Useful when we are currently reading a word and want to check if the next character belongs to it, without
-     * accidentally consuming a character that belongs to the next token.
+     * Returns the current character without consuming it.
      *
-     * @return The upcoming character, or a null character if we have reached the end of the source code.
+     * @return The current character, or {@code \0} if the end of the source has been reached.
      */
-    private char peekNextChar() {
+    private char peekChar() {
         if (isAtEnd()) {
             return EOF_CHAR;
         }
@@ -190,10 +185,9 @@ class Lexer {
     }
 
     /**
-     * Reads the character at the current position and moves the internal pointer one step forward to progress through
-     * the source code character by character.
+     * Consumes the current character and advances to the next one.
      *
-     * @return The character that was just read.
+     * @return The character that was just consumed.
      */
     private char advanceChar() {
         return source.charAt(current++);
