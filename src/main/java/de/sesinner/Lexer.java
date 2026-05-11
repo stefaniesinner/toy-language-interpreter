@@ -61,7 +61,7 @@ class Lexer {
     List<Token> scanTokens() {
         while (!isAtEnd()) {
             start = current; // marks the beginning of the next word
-            char c = scanNextChar();
+            char c = advanceChar();
             scanToken(c);
         }
 
@@ -123,7 +123,7 @@ class Lexer {
      */
     private void scanNumber() {
         while (Character.isDigit(peekNextChar())) {
-            scanNextChar();
+            advanceChar();
         }
 
         String text = source.substring(start, current);
@@ -142,7 +142,7 @@ class Lexer {
      */
     private void scanIdentifier() {
         while (Character.isLetterOrDigit(peekNextChar()) || peekNextChar() == '_') {
-            scanNextChar();
+            advanceChar();
         }
 
         String text = source.substring(start, current);
@@ -195,7 +195,7 @@ class Lexer {
      *
      * @return The character that was just read.
      */
-    private char scanNextChar() {
+    private char advanceChar() {
         return source.charAt(current++);
     }
 
