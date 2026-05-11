@@ -6,8 +6,7 @@ import java.util.List;
  * Represents an expression in our language.
  * <p>
  * An expression is any piece of code that can be evaluated to produce a value. When the {@link Parser} reads the source
- * code, it connects {@link Expr} and {@link Stmt} nodes together to build a tree structure called the <i>Abstract
- * Syntax Tree (AST)</i>.
+ * code, it connects {@link Expr} and {@link Stmt} nodes together to build the <i>Abstract Syntax Tree (AST)</i>.
  * <p>
  * Expressions are the parts of that tree that compute values. They are embedded inside {@link Stmt} nodes which perform
  * the actions.
