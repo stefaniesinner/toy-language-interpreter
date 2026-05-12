@@ -59,12 +59,12 @@ class Lexer {
      * @return A list of all identified tokens in the correct order.
      */
     List<Token> scanTokens() {
-        while (!isAtEnd()) {
+        while (!isEndOfSource()) {
             start = current; // marks the beginning of the next word
             char c = advanceChar();
             scanToken(c);
         }
-
+        // marks the end of the source code
         tokens.add(new Token(EOF, "", Optional.empty(), line));
         return tokens;
     }
@@ -93,16 +93,15 @@ class Lexer {
             case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
             case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
 
-            // whitespaces and new lines (EOL)
-            case ' ':
-            case '\r':
-            case '\t':
-                // ignore whitespace
-                break;
+            // ignore whitespaces and line breaks (EOL)
+            case ' ': break;
+            case '\r': break;
+            case '\t': break;
 
             case '\n':
                 addToken(EOL);
-                line++; break;
+                line++;
+                break;
 
             default:
                 if (Character.isDigit(c)) {
@@ -149,23 +148,23 @@ class Lexer {
     }
 
     /**
-     * Checks if we have reached the end of the source code string.
+     * Checks if we have reached the end of the source code.
      *
      * @return {@code true} if there are no more characters to read, otherwise {@code false}.
      */
-    private boolean isAtEnd() {
+    private boolean isEndOfSource() {
         return current >= source.length();
     }
 
     /**
-     * Consumes the current character if it matches the expected one, otherwise does nothing.
+     * Consumes the current character if it equals {@code expected}, otherwise does nothing.
      * Used to distinguish two-character tokens such as {@code ==} from {@code =}.
      *
-     * @param expected The character we hope to see.
-     * @return {@code true} if it matched with the expected character, otherwise {@code false}.
+     * @param expected The character to compare against.
+     * @return {@code true} if the character was consumed, {@code false} otherwise.
      */
     private boolean match(char expected) {
-        if (!isAtEnd() && source.charAt(current) == expected) {
+        if (!isEndOfSource() && source.charAt(current) == expected) {
             current++;
             return true;
         }
@@ -178,7 +177,7 @@ class Lexer {
      * @return The current character, or {@code \0} if the end of the source has been reached.
      */
     private char peekChar() {
-        if (isAtEnd()) {
+        if (isEndOfSource()) {
             return EOF_CHAR;
         }
         return source.charAt(current);
