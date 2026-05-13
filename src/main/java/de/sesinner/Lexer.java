@@ -76,34 +76,26 @@ class Lexer {
      */
     private void scanToken(char c) {
         switch (c) {
-            // single-character tokens
-            case '(': addToken(LEFT_PAREN); break;
-            case ')': addToken(RIGHT_PAREN); break;
-            case '{': addToken(LEFT_BRACE); break;
-            case '}': addToken(RIGHT_BRACE); break;
-            case ',': addToken(COMMA); break;
-            case '-': addToken(MINUS); break;
-            case '+': addToken(PLUS); break;
-            case '/': addToken(SLASH); break;
-            case '*': addToken(STAR); break;
+            case '(' -> addToken(LEFT_PAREN);
+            case ')' -> addToken(RIGHT_PAREN);
+            case '{' -> addToken(LEFT_BRACE);
+            case '}' -> addToken(RIGHT_BRACE);
+            case ',' -> addToken(COMMA);
+            case '-' -> addToken(MINUS);
+            case '+' -> addToken(PLUS);
+            case '/' -> addToken(SLASH);
+            case '*' -> addToken(STAR);
 
-            // one or two character tokens
-            case '!': addToken(match('=') ? BANG_EQUAL : BANG); break;
-            case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
-            case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
-            case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
+            case '!' -> addToken(match('=') ? BANG_EQUAL : BANG);
+            case '=' -> addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+            case '>' -> addToken(match('=') ? GREATER_EQUAL : GREATER);
+            case '<' -> addToken(match('=') ? LESS_EQUAL : LESS);
 
-            // ignore whitespaces and line breaks (EOL)
-            case ' ': break;
-            case '\r': break;
-            case '\t': break;
+            case ' ', '\r', '\t' -> {} // ignore whitespaces and line breaks (EOL)
 
-            case '\n':
-                addToken(EOL);
-                line++;
-                break;
+            case '\n' -> { addToken(EOL); line++; }
 
-            default:
+            default -> {
                 if (Character.isDigit(c)) {
                     scanNumber();
                 } else if (Character.isLetter(c) || c == '_') {
@@ -111,7 +103,7 @@ class Lexer {
                 } else {
                     throw new RuntimeException("Unexpected character: '" + c + "' at line " + line);
                 }
-                break;
+            }
         }
     }
 
